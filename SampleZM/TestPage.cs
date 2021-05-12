@@ -31,6 +31,32 @@ namespace SampleZM
             Application.Current.MainPage = new TestPage();
         }
 
+        Button AddButton(string text, string value)
+        {
+            return new Button
+            {
+                Text = text,
+                Command = new Command<string>(OnButton),
+                CommandParameter = value,
+                Triggers =
+                {
+                    new DataTrigger(typeof(Button))
+                    {
+                        Binding = new Binding(".", source: CultureInfo.CurrentUICulture.TwoLetterISOLanguageName),
+                        Value = value,
+                        Setters =
+                        {
+                            new Setter
+                            {
+                                Property = BackgroundColorProperty,
+                                Value = Color.Red
+                            },
+                        }
+                    }
+                }
+            };
+        }
+
         public TestPage()
         {
             Content = new StackLayout
@@ -42,24 +68,9 @@ namespace SampleZM
                         TextColor = Color.Red,
                         Text = Properties.AppResources.Red
                     },
-                    new Button
-                    {
-                        Text = "Portuguese",
-                        Command = new Command<string>(OnButton),
-                        CommandParameter = "pt"
-                    },
-                    new Button
-                    {
-                        Text = "Spanish",
-                        Command = new Command<string>(OnButton),
-                        CommandParameter = "es"
-                    },
-                    new Button
-                    {
-                        Text = "English",
-                        Command = new Command<string>(OnButton),
-                        CommandParameter = "en"
-                    }
+                    AddButton("Portuguese", "pt"),
+                    AddButton("Spanish", "es"),
+                    AddButton("English", "en")
                 }
             };
         }
